@@ -49,7 +49,9 @@ public class Code {
 			{
 				j = 0;
 				
-				while ( j < thisCode.length() && !isBullIndex[i] && thisCode.charAt(i) != otherCode.charAt(j) || isBullIndex[j] || isCowIndex[j] )
+				while ( j < thisCode.length() && !isBullIndex[i] && thisCode.charAt(i) != otherCode.charAt(j) || 
+							j < thisCode.length() && isBullIndex[j] || 
+							j < thisCode.length() && isCowIndex[j] )
 				{
 					++j;
 				}
@@ -94,8 +96,8 @@ public class Code {
 			public int getBulls() { return bulls; }
 			public int getCows() { return cows; }
 			
-			int bulls;
-			int cows;
+			private int bulls;
+			private int cows;
 		}
 		
 		
