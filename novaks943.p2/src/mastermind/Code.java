@@ -24,8 +24,13 @@ public class Code {
 			return equal || same;
 		}
 		
-		public Code.Results compare(Code other)
+		public Code.Results compare (Code other) throws java.lang.IllegalArgumentException
 		{
+			if( this.code.length() != other.code.length() )
+			{
+				throw new java.lang.IllegalArgumentException("Codes being compared are not the same length");
+			}
+			
 			int bullCount = 0;
 			int cowCount = 0;
 			
@@ -100,6 +105,7 @@ public class Code {
 			private int cows;
 		}
 		
+		public java.lang.String toString() {return code;}
 		
 		private java.lang.String code;
 }
