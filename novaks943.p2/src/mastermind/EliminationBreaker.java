@@ -18,39 +18,21 @@ public class EliminationBreaker implements CodeBreaker {
 		this.checkedCount = 0;
 	}
 	
-	public Code[] getPossibilities(int range, int length)
+	private Code[] getPossibilities(int range, int length)
 	{
-		char[] alphabet = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'};
 		
 		int size = (int) java.lang.Math.pow(range, length);
 		
-		StringBuilder[] possArr = new StringBuilder[size];
-		 
-		for (int i = 0; i < possArr.length; i++) 
-		{
-			 possArr[i] = new StringBuilder("");
-		}
+		String[] possArr = new String[size];
 		
-		int timesWritten = 1;
-		int letterTrack = 0;
-		int j = 0;
+		char[] currentLetters = new char[length];
+		for(int i = 0; i < length; ++i)
+			currentLetters[i] = 'a';
 		
-		for (int i = 0; i < length; ++i)
+		for (int i = 0; i < size; ++i)
 		{
-			j = 0;
-			while (j < size)
-			{
-				for (int k = 0; k < timesWritten; ++k)
-				{
-					possArr[j].insert(0, alphabet[letterTrack]);
-					++j;
-				}
-				if (letterTrack < range - 1)
-					++letterTrack;
-				else
-					letterTrack = 0;
-			}
-			timesWritten *= range;
+			possArr[i] = String.valueOf(currentLetters);
+			currentLetters = nextCombo(currentLetters, range);
 		}
 		
 		Code[] codeArr = new Code[size];
@@ -61,6 +43,38 @@ public class EliminationBreaker implements CodeBreaker {
 		}
 		
 		return codeArr;
+	}
+	
+	private char[] nextCombo (char[] letters, int range)
+	{
+		int i = letters.length - 1;
+		boolean isLastInRange;
+		
+		do
+		{
+			isLastInRange = nextLetter(letters[i], range) == 'a';
+			letters[i] = nextLetter(letters[i], range);
+			--i;
+		} while (isLastInRange && i >= 0);
+		
+		return letters;
+	}
+	
+	private char nextLetter(char letter, int range)
+	{
+		char nextLetter;
+		
+		if (letter == 'a' + range - 1)
+		{
+			nextLetter = 'a';
+		}
+		
+		else
+		{
+			nextLetter = (char) (letter + 1);
+		}
+		
+		return nextLetter;
 	}
 	
 	/**

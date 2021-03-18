@@ -21,17 +21,17 @@ public class ConsoleInterface {
 		int possibleCodeCount;
 		int guessCount = 1;
 		
-		while(cpu.possibleCodeCount() > 1)
+		do
 		{
+			possibleCodeCount = cpu.possibleCodeCount();
 			currentGuess = cpu.nextGuess();
 			currentResults = secretCode.compare(currentGuess);
-			possibleCodeCount = cpu.possibleCodeCount();
-			System.out.println("Possible codes: " + cpu.possibleCodeCount());
+			System.out.println("Possible codes: " + possibleCodeCount);
 			System.out.println("Breakers guess(" + guessCount++ + "): " + currentGuess.toString());
 			System.out.println("Bulls-Cows: " + currentResults.getBulls() + "-" + currentResults.getCows());
 			
 			cpu.guessResults(currentGuess, currentResults);
-		}
+		} while(possibleCodeCount > 1 && !(currentResults.getBulls() == length));
 		
 		System.out.println("Game over!");
 	}
