@@ -1,13 +1,18 @@
 package mastermind;
 
-public class EliminationBreaker implements CodeBreaker {
+public class ConsoleCodeBreaker implements CodeBreaker {
+	private java.util.Scanner scanner;
+	private java.io.PrintStream out;
 	
 	private Code[] possibilities;
 	private boolean[] checked;
 	private int checkedCount;
 	
-	public EliminationBreaker(int codeLength, int codeRange)
+	public ConsoleCodeBreaker(java.util.Scanner scanner, java.io.PrintStream out, int codeLength, int codeRange)
 	{
+		this.scanner = scanner;
+		this.out = out;
+		
 		this.possibilities = getPossibilities(codeRange, codeLength);
 		this.checked = new boolean[possibilities.length];
 		this.checkedCount = 0;
@@ -72,18 +77,15 @@ public class EliminationBreaker implements CodeBreaker {
 		return nextLetter;
 	}
 	
+	
 	/**
 	 * Generates the next code breaker guess.
 	 * @return the next guess.
 	 */
 	public Code nextGuess()
 	{
-		int i = 0;
-		
-		while (checked[i])
-			++i;
-		
-		return possibilities[i];
+		out.println("What is your next guess: ");
+		return new Code(scanner.next());
 	}
 	
 	/**

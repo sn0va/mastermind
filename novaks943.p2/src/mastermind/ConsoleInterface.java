@@ -4,17 +4,43 @@ public class ConsoleInterface {
 
 	public static void main(String[] args) {
 		java.util.Scanner scan = new java.util.Scanner(System.in);
+		java.io.PrintStream out = new java.io.PrintStream(System.out);
 		
-		System.out.println("Enter length: ");
+		out.println("Enter length: ");
 		int length = scan.nextInt();
 		
-		System.out.println("Enter range: ");
+		out.println("Enter range: ");
 		int range = scan.nextInt();
 		
-		System.out.println("Enter a code with length " + length + " and range " + range + ":");
-		Code secretCode = new Code(scan.next());
+		String choice;
+		CodeMaker maker;
+		CodeBreaker breaker;
 		
-		EliminationBreaker cpu = new EliminationBreaker(length, range);
+		do
+		{
+		out.println("Select a human(h) or computer(c) code maker: ");
+		choice = scan.next();
+		} while (!choice.equals("h") && !choice.equals("c"));
+		
+		if(choice.equals("h"))
+			maker = new ConsoleCodeMaker(scan, out, length, range);
+		else
+			maker = new RandomCodeMaker(length, range);
+		
+		do
+		{
+		out.println("Select a human(h) or computer(c) code breaker: ");
+		choice = scan.next();
+		} while (!choice.equals("h") && !choice.equals("c"));
+		
+		if(choice.equals("h"))
+			breaker = new ConsoleCodeBreaker(scan, out, length, range);
+		else
+			breaker = new EliminationBreaker(length, range);
+		
+		Code secretCode = maker.generateCode();
+		
+		out.println("The secret code is: " + secretCode.toString());
 		
 		Code currentGuess;
 		Code.Results currentResults;
@@ -23,17 +49,19 @@ public class ConsoleInterface {
 		
 		do
 		{
-			possibleCodeCount = cpu.possibleCodeCount();
-			currentGuess = cpu.nextGuess();
+			possibleCodeCount = breaker.possibleCodeCount();
+			currentGuess = breaker.nextGuess();
 			currentResults = secretCode.compare(currentGuess);
-			System.out.println("Possible codes: " + possibleCodeCount);
-			System.out.println("Breakers guess(" + guessCount++ + "): " + currentGuess.toString());
-			System.out.println("Bulls-Cows: " + currentResults.getBulls() + "-" + currentResults.getCows());
+			out.println("Possible codes: " + possibleCodeCount);
+			out.println("Breakers guess(" + guessCount++ + "): " + currentGuess.toString());
+			out.println("Bulls-Cows: " + currentResults.getBulls() + "-" + currentResults.getCows());
 			
-			cpu.guessResults(currentGuess, currentResults);
+			breaker.guessResults(currentGuess, currentResults);
 		} while(possibleCodeCount > 1 && !(currentResults.getBulls() == length));
 		
-		System.out.println("Game over!");
+		out.println("Game over!");
+		scan.close();
+		out.close();
 	}
 
 }
