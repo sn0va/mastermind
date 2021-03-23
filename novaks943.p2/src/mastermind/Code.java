@@ -73,6 +73,67 @@ public class Code {
 			return result;
 		}
 		
+		public Code nextCode(int range) throws java.util.NoSuchElementException
+		{
+			char[] letters = code.toCharArray();
+			int i = letters.length - 1;
+			boolean isLastInRange;
+			
+			do
+			{
+				isLastInRange = nextLetter(letters[i], range) == 'a';
+				letters[i] = nextLetter(letters[i], range);
+				--i;
+			} while (isLastInRange && i >= 0);
+			
+			return new Code(letters.toString());
+		}
+		
+		private char nextLetter(char letter, int range)
+		{
+			char nextLetter;
+			
+			if (letter == 'a' + range - 1)
+				nextLetter = 'a';
+			
+			else
+				nextLetter = (char) (letter + 1);
+			
+			return nextLetter;
+		}
+		
+		public boolean hasNextCode(int range)
+		{
+			char[] letters = code.toCharArray();
+			boolean hasNext = false;
+			int i = 0;
+			
+			do
+			{
+				++i;
+			} while (nextLetter(letters[i], range) == 'a' && i < letters.length);
+			
+			if (i == letters.length)
+				hasNext = true;
+			
+			return hasNext;
+		}
+		
+		public int range()
+		{
+			char[] letters = code.toCharArray();
+			
+			char highestChar = 'a';
+			
+			for ( char letter : letters)
+			{
+				if (letter > highestChar)
+					highestChar = letter;
+			}
+			
+			return (int) (highestChar - 'a') + 1;
+		}
+		
 		public class Results {
 			
 			Results(int bulls, int cows)
