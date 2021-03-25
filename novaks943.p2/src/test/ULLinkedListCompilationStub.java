@@ -35,7 +35,6 @@ public class ULLinkedListCompilationStub {
 		ll.addLast(ll.removeLast());
 		int integer = ll.size();
 		ll.clear();		
-		System.out.println("Goodbye");
 	}
 
 }
