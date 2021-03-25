@@ -11,10 +11,6 @@ public class RandomCodeMaker implements CodeMaker {
 		this.range = range;
 	}
 	
-	/**
-	 * Generates a code.
-	 * @return the code generated
-	 */
 	public Code generateCode()
 	{
 		char[] charArr = new char[length];

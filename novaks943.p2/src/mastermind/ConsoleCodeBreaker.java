@@ -20,7 +20,7 @@ public class ConsoleCodeBreaker implements CodeBreaker {
 	
 	private ULLinkedList<Code> getPossibilities(int range, int length)
 	{
-		
+		// Create an initial string with the correct amount of a's in it
 		String initialString = "";
 		for(int i = 0; i < length; ++i)
 			initialString += "a";
@@ -51,18 +51,22 @@ public class ConsoleCodeBreaker implements CodeBreaker {
 			out.println("Enter a guess with length " + length + " and range " + range + ":");
 			input = new Code(scanner.next().toLowerCase());
 			
+			// If incorrect length
 			if (input.toString().length() != length)
 				out.println("Error: incorrect length, please try again");
 			
+			// Invalid characters
 			else if (!isLetters(input.toString()))
 				out.println("Invalid input, please provide letters only");
 			
+			// Out of range
 			else if (input.range() > range)
 			{
 				out.println("Error: out of range, please try again");
 				out.println("Hint: your code shouldn't include any letters past " + String.valueOf((char) (('a' + range) - 1)) + " alphabetically");
 			}
 			
+			// If the input is not invalid
 			else
 				guess = input;
 			
@@ -78,8 +82,10 @@ public class ConsoleCodeBreaker implements CodeBreaker {
 		char[] characters = str.toCharArray();
 		int i = 0;
 		
+		// While no non-letter characters have been found and i is within length
 		while ( isLetters && i < characters.length )
 		{
+			// If the character isn't a letter
 			if (!Character.isLetter(characters[i]))
 				isLetters = false;
 			++i;
@@ -97,6 +103,7 @@ public class ConsoleCodeBreaker implements CodeBreaker {
 		{
 			currentResult = guess.compare(iter.next());
 			
+			// If the amount of bulls and cows aren't equal
 			if(!currentResult.equals(results))
 			{
 				iter.remove();

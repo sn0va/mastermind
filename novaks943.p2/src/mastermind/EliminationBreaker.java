@@ -11,6 +11,7 @@ public class EliminationBreaker implements CodeBreaker {
 	
 	private ULLinkedList<Code> getPossibilities(int range, int length)
 	{		
+		// Create an initial string with the correct amount of a's
 		String initialString = "";
 		for(int i = 0; i < length; ++i)
 			initialString += "a";
@@ -44,8 +45,10 @@ public class EliminationBreaker implements CodeBreaker {
 		
 		while (iter.hasNext())
 		{
+			// Comparing the guess passed in to whatever possibility iter is on
 			currentResult = guess.compare(iter.next());
 			
+			// If the bulls and cows of currentResult don't equal the results passed in
 			if(!currentResult.equals(results))
 			{
 				iter.remove();

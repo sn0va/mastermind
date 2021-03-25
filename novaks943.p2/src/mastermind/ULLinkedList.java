@@ -69,7 +69,9 @@ public class ULLinkedList<E> implements java.lang.Cloneable, java.lang.Iterable<
 			if (prevReturned == null)
 				throw new java.lang.IllegalStateException("No previously returned element to remove");
 			
+			// Make sure current isn't pointing to the same place as prevReturned (if prev() was called most recently)
 			current = prevReturned.next;
+			
 			prevReturned.prev.next = prevReturned.next;
 			prevReturned.next.prev = prevReturned.prev;
 			--size;			

@@ -12,6 +12,7 @@ public class ConsoleInterface {
 		
 		CodeMaker maker;
 		
+		// If the code maker is human
 		if(getIsHuman("code maker", scan))
 			maker = new ConsoleCodeMaker(scan, out, length, range);
 		else
@@ -20,6 +21,7 @@ public class ConsoleInterface {
 		
 		CodeBreaker breaker;
 		
+		// If the code breaker is human
 		if(getIsHuman("code breaker", scan))
 			breaker = new ConsoleCodeBreaker(scan, out, length, range);
 		else
@@ -45,7 +47,8 @@ public class ConsoleInterface {
 			out.println("Bulls-Cows: " + currentResults.getBulls() + "-" + currentResults.getCows());
 			
 			breaker.guessResults(currentGuess, currentResults);
-		} while(possibleCodeCount > 1 && !(currentResults.getBulls() == length));
+		// While the current guess doesn't have a number of bulls equal to the length
+		} while(!(currentResults.getBulls() == length));
 		
 		out.println("Possible codes: " + breaker.possibleCodeCount());
 		
@@ -114,9 +117,11 @@ public class ConsoleInterface {
 			System.out.println("Select a human(h) or computer(c) " + roleName + ": ");
 			choice = scan.next().toLowerCase();
 			
+			// If choice doesn't equal h or c
 			if (!choice.equals("h") && !choice.equals("c"))
 				System.out.println("Invalid input, please try again");
-			
+		
+		// While choice doesn't equal h or c
 		} while (!choice.equals("h") && !choice.equals("c"));
 		
 		if (choice.equals("h"))

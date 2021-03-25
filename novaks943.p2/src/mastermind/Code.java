@@ -37,13 +37,16 @@ public class Code {
 			java.lang.String thisCode = this.code.toLowerCase();
 			java.lang.String otherCode = other.code.toLowerCase();
 			
+			// Boolean arrays for keeping track of the location of bulls and cows
 			boolean[] isBullIndex = new boolean[thisCode.length()];
 			boolean[] isCowIndex = new boolean[thisCode.length()];
 				
 			for (int i = 0; i < thisCode.length(); ++i)
 			{	
+				// If the current characters are equal
 				if (thisCode.charAt(i) == otherCode.charAt(i)) 
 				{
+					// Mark the index in both as a bull
 					isBullIndex[i] = true;
 					++bullCount;
 				}
@@ -54,6 +57,9 @@ public class Code {
 			{
 				j = 0;
 				
+				// While j is within this code length and it's not a bull index and the character at i in this does not equal the character at j in the other code
+				// or while j is in length and it's a bull index
+				// or while j in within length and it's a cow index 
 				while ( j < thisCode.length() && !isBullIndex[i] && thisCode.charAt(i) != otherCode.charAt(j) || 
 							j < thisCode.length() && isBullIndex[j] || 
 							j < thisCode.length() && isCowIndex[j] )
@@ -61,6 +67,7 @@ public class Code {
 					++j;
 				}
 				
+				// If the loop exited early and it's not a bull index
 				if ( j < thisCode.length() && !isBullIndex[i] )
 				{
 					isCowIndex[j] = true;
@@ -84,9 +91,11 @@ public class Code {
 			
 			do
 			{	
+				// The character is last in the range if nextLetter() resets it to a
 				isLastInRange = nextLetter(letters[i], range) == 'a';
 				letters[i] = nextLetter(letters[i], range);
 				--i;
+			// Continue moving left in the code as long as the most recent letter updated was reset to a or until you've reached the end
 			} while (isLastInRange && i >= 0);
 			
 			return new Code(String.valueOf(letters));
@@ -96,6 +105,7 @@ public class Code {
 		{
 			char nextLetter;
 			
+			// If the letter is at the end of the given range
 			if (letter == 'a' + range - 1)
 				nextLetter = 'a';
 			
@@ -111,11 +121,13 @@ public class Code {
 			boolean hasNext = true;
 			int i = 0;
 			
+			// While i is in range and the current letter being checked is at the end of it's range
 			while( i < letters.length && nextLetter(letters[i], range) == 'a' )
 			{
 				++i;
 			}
 			
+			// If the loop didn't exit early
 			if ( i == letters.length )
 				hasNext = false;
 			
@@ -128,7 +140,7 @@ public class Code {
 			
 			char highestChar = 'a';
 			
-			for ( char letter : letters)
+			for ( char letter : letters )
 			{
 				if (letter > highestChar)
 					highestChar = letter;

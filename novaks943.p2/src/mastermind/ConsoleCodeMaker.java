@@ -14,10 +14,6 @@ public class ConsoleCodeMaker implements CodeMaker{
 		this.range = codeRange;
 	}
 	
-	/**
-	 * Generates a code.
-	 * @return the code generated
-	 */
 	public Code generateCode()
 	{
 		Code secretCode = null;
@@ -28,18 +24,22 @@ public class ConsoleCodeMaker implements CodeMaker{
 			out.println("Enter a code with length " + length + " and range " + range + ":");
 			input = new Code(scanner.next().toLowerCase());
 			
+			// Invalid length
 			if (input.toString().length() != length)
 				out.println("Error: incorrect length, please try again");
 			
+			// Invalid characters
 			else if (!isLetters(input.toString()))
 				out.println("Invalid input, please provide letters only");
 			
+			// Out of range
 			else if (input.range() > range)
 			{
 				out.println("Error: out of range, please try again");
 				out.println("Hint: your code shouldn't include any letters past " + String.valueOf((char) (('a' + range) - 1)) + " alphabetically");
 			}
 			
+			// Input is not invalid
 			else
 				secretCode = input;
 			
