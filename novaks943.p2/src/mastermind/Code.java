@@ -75,18 +75,21 @@ public class Code {
 		
 		public Code nextCode(int range) throws java.util.NoSuchElementException
 		{
+			if (!hasNextCode(range))
+				throw new java.util.NoSuchElementException("No next code within that range");
+			
 			char[] letters = code.toCharArray();
 			int i = letters.length - 1;
 			boolean isLastInRange;
 			
 			do
-			{
+			{	
 				isLastInRange = nextLetter(letters[i], range) == 'a';
 				letters[i] = nextLetter(letters[i], range);
 				--i;
 			} while (isLastInRange && i >= 0);
 			
-			return new Code(letters.toString());
+			return new Code(String.valueOf(letters));
 		}
 		
 		private char nextLetter(char letter, int range)
@@ -105,16 +108,16 @@ public class Code {
 		public boolean hasNextCode(int range)
 		{
 			char[] letters = code.toCharArray();
-			boolean hasNext = false;
+			boolean hasNext = true;
 			int i = 0;
 			
-			do
+			while( i < letters.length && nextLetter(letters[i], range) == 'a' )
 			{
 				++i;
-			} while (nextLetter(letters[i], range) == 'a' && i < letters.length);
+			}
 			
-			if (i == letters.length)
-				hasNext = true;
+			if ( i == letters.length )
+				hasNext = false;
 			
 			return hasNext;
 		}

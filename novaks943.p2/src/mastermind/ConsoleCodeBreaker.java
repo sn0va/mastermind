@@ -3,122 +3,110 @@ package mastermind;
 public class ConsoleCodeBreaker implements CodeBreaker {
 	private java.util.Scanner scanner;
 	private java.io.PrintStream out;
+	private int length;
+	private int range;
 	
-	private Code[] possibilities;
-	private boolean[] checked;
-	private int checkedCount;
+	private ULLinkedList<Code> possibilities;
 	
 	public ConsoleCodeBreaker(java.util.Scanner scanner, java.io.PrintStream out, int codeLength, int codeRange)
 	{
 		this.scanner = scanner;
 		this.out = out;
+		this.length = codeLength;
+		this.range = codeRange;
 		
 		this.possibilities = getPossibilities(codeRange, codeLength);
-		this.checked = new boolean[possibilities.length];
-		this.checkedCount = 0;
 	}
 	
-	private Code[] getPossibilities(int range, int length)
+	private ULLinkedList<Code> getPossibilities(int range, int length)
 	{
 		
-		int size = (int) java.lang.Math.pow(range, length);
-		
-		String[] possArr = new String[size];
-		
-		char[] currentLetters = new char[length];
+		String initialString = "";
 		for(int i = 0; i < length; ++i)
-			currentLetters[i] = 'a';
+			initialString += "a";
 		
-		for (int i = 0; i < size; ++i)
+		Code initialCode = new Code(initialString);
+		Code currentCode = initialCode;
+		
+		ULLinkedList<Code> list = new ULLinkedList<Code>();
+		
+		list.addLast(initialCode);
+		
+		while (currentCode.hasNextCode(range))
 		{
-			possArr[i] = String.valueOf(currentLetters);
-			currentLetters = nextCombo(currentLetters, range);
+			currentCode = currentCode.nextCode(range);
+			list.addLast(currentCode);
 		}
 		
-		Code[] codeArr = new Code[size];
-		
-		for(int i = 0; i < codeArr.length; ++i)
-		{
-			codeArr[i] = new Code(possArr[i].toString());
-		}
-		
-		return codeArr;
+		return list;
 	}
 	
-	private char[] nextCombo (char[] letters, int range)
+	public Code nextGuess()
 	{
-		int i = letters.length - 1;
-		boolean isLastInRange;
+		Code guess = null;
+		Code input;
 		
 		do
 		{
-			isLastInRange = nextLetter(letters[i], range) == 'a';
-			letters[i] = nextLetter(letters[i], range);
-			--i;
-		} while (isLastInRange && i >= 0);
+			out.println("Enter a guess with length " + length + " and range " + range + ":");
+			input = new Code(scanner.next().toLowerCase());
+			
+			if (input.toString().length() != length)
+				out.println("Error: incorrect length, please try again");
+			
+			else if (!isLetters(input.toString()))
+				out.println("Invalid input, please provide letters only");
+			
+			else if (input.range() > range)
+			{
+				out.println("Error: out of range, please try again");
+				out.println("Hint: your code shouldn't include any letters past " + String.valueOf((char) (('a' + range) - 1)) + " alphabetically");
+			}
+			
+			else
+				guess = input;
+			
+		} while (guess == null);
 		
-		return letters;
+		
+		return guess;
 	}
-	
-	private char nextLetter(char letter, int range)
+
+	private boolean isLetters(String str) 
 	{
-		char nextLetter;
+		boolean isLetters = true;
+		char[] characters = str.toCharArray();
+		int i = 0;
 		
-		if (letter == 'a' + range - 1)
+		while ( isLetters && i < characters.length )
 		{
-			nextLetter = 'a';
+			if (!Character.isLetter(characters[i]))
+				isLetters = false;
+			++i;
 		}
 		
-		else
-		{
-			nextLetter = (char) (letter + 1);
-		}
-		
-		return nextLetter;
+		return isLetters;
 	}
 	
-	
-	/**
-	 * Generates the next code breaker guess.
-	 * @return the next guess.
-	 */
-	public Code nextGuess()
-	{
-		out.println("What is your next guess: ");
-		return new Code(scanner.next());
-	}
-	
-	/**
-	 * Gives the code breaker the results of their most recent guess.
-	 * @param guess the most recent guess
-	 * @param results the results of comparing that guess to the secret code
-	 */
 	public void guessResults(Code guess, Code.Results results)
 	{
 		Code.Results currentResult;
+		java.util.Iterator<Code> iter = possibilities.iterator();
 		
-		for (int i = 0; i < possibilities.length; ++i)
+		while (iter.hasNext())
 		{
-			currentResult = guess.compare(possibilities[i]);
+			currentResult = guess.compare(iter.next());
 			
 			if(!currentResult.equals(results))
 			{
-				if (!checked[i])
-				{
-					checked[i] = true;
-					++checkedCount;
-				}
+				iter.remove();
 			}
 		}
 	}
 	
-	/**
-	 * Returns how many codes this breaker thinks are still possibly the secret code.
-	 * This method allows me to test your code.
-	 * @return possible code count
-	 */
+
 	public int possibleCodeCount()
 	{
-		return possibilities.length - checkedCount;
+		return possibilities.size();
 	}
 }

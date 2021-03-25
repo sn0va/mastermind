@@ -28,7 +28,7 @@ public class ConsoleInterface {
 		
 		Code secretCode = maker.generateCode();
 		
-		out.println("The secret code is: " + secretCode.toString());
+		out.println("The secret code is " + secretCode.toString());
 		
 		Code currentGuess;
 		Code.Results currentResults;
@@ -46,6 +46,8 @@ public class ConsoleInterface {
 			
 			breaker.guessResults(currentGuess, currentResults);
 		} while(possibleCodeCount > 1 && !(currentResults.getBulls() == length));
+		
+		out.println("Possible codes: " + breaker.possibleCodeCount());
 		
 		out.println("Game over!");
 		scan.close();
